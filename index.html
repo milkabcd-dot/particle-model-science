@@ -4,21 +4,27 @@
 <meta charset="UTF-8">
 <style>
   :root {
-    --bg-pink: #fce7f3;
-    --border-pink: #db2777;
-    --text: #831843;
+    --bg-purple: #f5f3ff;
+    --border-purple: #7e22ce; /* סגול חזק למסגרת */
+    --text: #4c1d95; /* טקסט סגול כהה */
     --yellow: #facc15;
     --right: #22c55e;
     --wrong: #e11d48;
   }
-  body { background: var(--bg-pink); color: var(--text); font-family: 'Assistant', sans-serif; padding: 30px; margin: 0; }
+  body { background: var(--bg-purple); color: var(--text); font-family: 'Assistant', sans-serif; padding: 30px; margin: 0; }
   .wrap { max-width: 900px; margin: 0 auto; }
   
-  h1 { font-size: 55px; color: var(--border-pink); text-align: center; }
+  h1 { font-size: 55px; color: var(--border-purple); text-align: center; margin-bottom: 10px; }
+  .instruction { 
+    text-align: center; font-size: 26px; font-weight: 900; 
+    color: white; background: var(--border-purple); 
+    padding: 15px 30px; border-radius: 50px; 
+    margin-bottom: 40px; border: 4px solid #581c87;
+  }
   
-  .reveal-panel { background: white; border: 6px solid var(--border-pink); border-radius: 25px; padding: 30px; margin-bottom: 40px; box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+  .reveal-panel { background: white; border: 6px solid var(--border-purple); border-radius: 25px; padding: 30px; margin-bottom: 40px; box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
   .reveal-canvas { display: grid; grid-template-columns: repeat(14, 1fr); gap: 4px; max-width: 600px; margin: 0 auto; }
-  .rc-cell { aspect-ratio: 1/1; background: #fbcfe8; border-radius: 4px; }
+  .rc-cell { aspect-ratio: 1/1; background: #ddd6fe; border-radius: 4px; }
   .rc-cell.colored { background: var(--yellow); }
   .rc-cell.result-right { background: var(--right); }
   .rc-cell.result-wrong { background: var(--wrong); }
@@ -26,50 +32,56 @@
   .grid { display: grid; gap: 25px; }
   .card { 
     background: white; 
-    border: 5px solid var(--border-pink); 
+    border: 5px solid var(--border-purple); 
     border-radius: 20px; 
     padding: 30px; 
     display: flex; 
     align-items: center; 
     gap: 30px; 
     cursor: pointer;
-    font-size: 26px; /* טקסט גדול מאוד */
+    font-size: 26px; 
     font-weight: 800;
   }
   
   .square-btn { 
     width: 80px; height: 80px; 
-    border: 5px solid var(--border-pink); 
+    border: 5px solid var(--border-purple); 
     border-radius: 15px; 
     background: white; 
     display: flex; align-items: center; justify-content: center; 
     font-weight: 900; font-size: 32px;
     flex-shrink: 0;
-    box-shadow: 6px 6px 0px var(--border-pink);
+    box-shadow: 6px 6px 0px var(--border-purple);
   }
   .card.active .square-btn { background: var(--yellow); border-color: var(--yellow); }
   .card.right .square-btn { background: var(--right); border-color: var(--right); }
   .card.wrong .square-btn { background: var(--wrong); border-color: var(--wrong); }
 
   button.action { 
-    background: var(--border-pink); color: white; 
+    background: var(--border-purple); color: white; 
     padding: 25px 60px; border-radius: 50px; border: none; cursor: pointer; 
     font-size: 28px; font-weight: 900; box-shadow: 0 8px 10px rgba(0,0,0,0.2); 
   }
   
-  footer { margin-top: 80px; text-align: center; font-size: 24px; color: var(--border-pink); font-weight: 900; }
+  footer { margin-top: 80px; text-align: center; font-size: 24px; color: var(--border-purple); font-weight: 900; }
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <header><h1>מעבדת החלקיקים</h1></header>
+  <header>
+    <h1>מעבדת החלקיקים</h1>
+    <div class="instruction">סמנו ב-V את כל המשפטים ה**נכונים** בלבד!</div>
+  </header>
+  
   <div class="reveal-panel"><div class="reveal-canvas" id="revealCanvas"></div></div>
   <div class="grid" id="grid"></div>
+  
   <div style="text-align:center; margin-top:50px;">
     <button class="action" id="checkBtn">✓ בדקו אותי</button>
   </div>
   <div id="scoreBox" style="text-align:center; margin-top:30px; font-weight:bold; font-size:28px;"></div>
+  
   <footer>עריכה: מילכה ברקו גרש</footer>
 </div>
 
