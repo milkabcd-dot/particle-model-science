@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -163,10 +164,6 @@
 </div>
 
 <script>
-// pos = {c,r} placement in the reveal mosaic (14 cols x 6 rows).
-// The 19 "correct" statements are placed to form a sheep silhouette (rows 0-4).
-// The 14 "incorrect" statements sit along the ground row (row 5) so they never
-// become part of the picture, even if a student mistakenly colors them.
 const statements = [
   {n:13, t:"גודלו של חלקיק יחיד מפלסטיק הוא כגודל חרוז קטן.", correct:false, pos:{c:0,r:5}},
   {n:14, t:"בנוזל: החלקיקים מחליקים זה על גבי זה, חלקיקים שכנים מחליפים מקומות.", correct:true, pos:{c:7,r:0}},
@@ -182,7 +179,7 @@ const statements = [
   {n:11, t:"בין החלקיקים במצב צבירה מוצק קיימים כוחות משיכה חזקים מאוד.", correct:true, pos:{c:2,r:2}},
   {n:10, t:"למסמר מברזל ולטבעת מברזל יש אותו סוג חלקיקים.", correct:true, pos:{c:3,r:2}},
   {n:18, t:"כשדוחסים גז בתוך מזרק סגור, מספר חלקיקי הגז לא משתנה.", correct:true, pos:{c:4,r:2}},
-  {n:24, t:"חלקיקים במצב נוזל נעים בשני סוגי תנועה: תנודה במקום ותנועה סיבובית.", correct:false, pos:{c:6,r:5}},
+  {n:24, t:"חלקיקים במצב נוזל נעים בשני סוגי תנועה: תנודה במקום ותנועה סיבובית.", correct:true, pos:{c:0,r:2}},
   {n:17, t:"התאדות מתרחשת משטח פני הנוזל בלבד. חלקיקי הנוזל בשכבה העליונה ניתקים בהדרגה מאלה שמתחתיהם.", correct:true, pos:{c:5,r:2}},
   {n:"3א", t:"נוזל מתאפיין במבנה חלקיקים מסודר, סדר חוזר על עצמו ושכנים קבועים.", correct:false, pos:{c:7,r:5}},
   {n:"5א", t:"ניתן לדחוס גז כי המרחק בין החלקיקים בגז הוא קטן.", correct:false, pos:{c:8,r:5}},
