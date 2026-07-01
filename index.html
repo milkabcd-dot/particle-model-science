@@ -3,84 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>מעבדת החלקיקים - צביעה אינטראקטיבית</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<title>מעבדת החלקיקים</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-light: #f8fafc;
+    --bg: #f8fafc;
     --panel: #ffffff;
     --border: #e2e8f0;
-    --text-main: #1e293b;
-    --text-dim: #64748b;
-    --accent-cyan: #0d9488;
-    --accent-yellow: #fde047;
-    --accent-wrong: #f43f5e;
-    --accent-right: #22c55e;
+    --text: #1e293b;
+    --accent: #0d9488;
+    --yellow: #fde047;
+    --wrong: #f43f5e;
+    --right: #22c55e;
   }
-  
-  body {
-    background-color: var(--bg-light);
-    color: var(--text-main);
-    font-family: 'Assistant', sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'Assistant', sans-serif; padding: 20px; margin: 0; }
   .wrap { max-width: 900px; margin: 0 auto; }
-  header { text-align: center; margin-bottom: 40px; }
-  h1 { font-family: 'Heebo', sans-serif; color: var(--text-main); }
+  header { text-align: center; margin-bottom: 30px; }
+  
+  .reveal-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+  .reveal-canvas { display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(6, 1fr); gap: 2px; max-width: 500px; margin: 0 auto; }
+  .rc-cell { aspect-ratio: 1/1; background: #f1f5f9; border-radius: 2px; }
+  .rc-cell.colored { background: var(--yellow); }
+  .rc-cell.result-right { background: var(--right); }
+  .rc-cell.result-wrong { background: var(--wrong); }
 
-  .reveal-panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-  }
-
-  .reveal-canvas {
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    gap: 4px;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .rc-cell {
-    aspect-ratio: 1/1;
-    background: #f1f5f9;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-  }
-
-  .rc-cell.colored { background: var(--accent-yellow); border-color: var(--accent-yellow); }
-  .rc-cell.result-right { background: var(--accent-right); border-color: var(--accent-right); }
-  .rc-cell.result-wrong { background: var(--accent-wrong); border-color: var(--accent-wrong); }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
-  .card { 
-    background: var(--panel); 
-    border: 1px solid var(--border); 
-    border-radius: 12px; 
-    padding: 15px; 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-  }
-
-  .hex-btn { width: 50px; height: 50px; border: none; background: none; cursor: pointer; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .card { background: var(--panel); border: 2px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.2s; }
+  .card:hover { border-color: var(--accent); }
+  
+  .hex-btn { width: 50px; height: 50px; flex-shrink: 0; border: none; background: none; position: relative; }
   .hex-fill { fill: #e2e8f0; stroke: #cbd5e1; stroke-width: 2; }
-  .hex-btn.colored .hex-fill { fill: var(--accent-yellow); stroke: var(--accent-yellow); }
-  .hex-btn.result-right .hex-fill { fill: var(--accent-right); stroke: var(--accent-right); }
-  .hex-btn.result-wrong .hex-fill { fill: var(--accent-wrong); stroke: var(--accent-wrong); }
-
-  .controls { text-align: center; margin-top: 40px; }
-  button { padding: 12px 30px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin: 5px; }
-  #checkBtn { background: var(--accent-cyan); color: white; }
-  #resetBtn { background: #e2e8f0; }
+  .card.active .hex-fill { fill: var(--yellow); stroke: var(--yellow); }
+  .card.right .hex-fill { fill: var(--right); stroke: var(--right); }
+  .card.wrong .hex-fill { fill: var(--wrong); stroke: var(--wrong); }
+  
+  .controls { text-align: center; margin-top: 30px; }
+  button { padding: 12px 30px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin: 5px; background: var(--accent); color: white; }
+  #resetBtn { background: #e2e8f0; color: var(--text); }
 </style>
 </head>
 <body>
@@ -88,7 +47,7 @@
 <div class="wrap">
   <header>
     <h1>מעבדת החלקיקים</h1>
-    <p>סמנו את המשפטים הנכונים כדי לחשוף את הציור.</p>
+    <p>לחצו על המשפטים הנכונים כדי לחשוף את הציור</p>
   </header>
 
   <div class="reveal-panel">
@@ -98,13 +57,10 @@
   <div class="grid" id="grid"></div>
 
   <div class="controls">
-    <button id="checkBtn">בדקו אותי</button>
-    <button id="resetBtn">איפוס</button>
+    <button id="checkBtn">✓ בדקו אותי</button>
+    <button id="resetBtn">↺ איפוס</button>
   </div>
-  
-  <div id="scoreBox" style="text-align:center; margin-top:20px; display:none;">
-    <strong id="scoreText"></strong>
-  </div>
+  <div id="scoreBox" style="text-align:center; margin-top:20px; font-weight:bold;"></div>
 </div>
 
 <script>
@@ -123,25 +79,25 @@ const statements = [
   {n:11, t:"בין החלקיקים במצב צבירה מוצק קיימים כוחות משיכה חזקים מאוד.", correct:true, pos:{c:2,r:2}},
   {n:10, t:"למסמר מברזל ולטבעת מברזל יש אותו סוג חלקיקים.", correct:true, pos:{c:3,r:2}},
   {n:18, t:"כשדוחסים גז בתוך מזרק סגור, מספר חלקיקי הגז לא משתנה.", correct:true, pos:{c:4,r:2}},
-  {n:24, t:"חלקיקים במצב נוזל נעים בשני סוגי תנועה: תנודה וסיבוב.", correct:true, pos:{c:0,r:2}},
+  {n:24, t:"חלקיקים במצב נוזל נעים בתנודה וסיבוב.", correct:true, pos:{c:0,r:2}},
   {n:17, t:"התאדות מתרחשת משטח פני הנוזל בלבד.", correct:true, pos:{c:5,r:2}},
   {n:"3א", t:"נוזל מתאפיין במבנה חלקיקים מסודר.", correct:false, pos:{c:6,r:5}},
-  {n:"5א", t:"ניתן לדחוס גז כי המרחק בין החלקיקים בגז הוא קטן.", correct:false, pos:{c:7,r:5}},
-  {n:"3ב", t:"דבש צמיג ממים, כי בין חלקיקי הדבש קיימים כוחות משיכה חלשים.", correct:false, pos:{c:8,r:5}},
+  {n:"5א", t:"ניתן לדחוס גז כי המרחק בין החלקיקים קטן.", correct:false, pos:{c:7,r:5}},
+  {n:"3ב", t:"דבש צמיג ממים בגלל כוחות משיכה חלשים.", correct:false, pos:{c:8,r:5}},
   {n:23, t:"האוויר הוא תערובת הכוללת חלקיקים מכמה סוגים.", correct:true, pos:{c:6,r:2}},
-  {n:1, t:"חימום חומר יכול לגרום לחלקיקים לנוע מהר יותר.", correct:true, pos:{c:7,r:2}},
-  {n:8, t:"חימום חלקיקי גז בכלי קשיח וסגור, מגדיל את ההתנגשויות.", correct:true, pos:{c:2,r:3}},
-  {n:2, t:"תוספת של חלקיקי גז לכלי קשיח וסגור מקטינה את הלחץ.", correct:false, pos:{c:9,r:5}},
-  {n:28, t:"שלגון מיץ קפוא הפך ממוצק לנוזל, כוחות המשיכה התחזקו.", correct:false, pos:{c:10,r:5}},
-  {n:29, t:"הפיזור העצמי של חלקיקי צבע במים חמים הוא איטי יותר.", correct:false, pos:{c:11,r:5}},
+  {n:1, t:"חימום חומר גורם לחלקיקים לנוע מהר יותר.", correct:true, pos:{c:7,r:2}},
+  {n:8, t:"חימום חלקיקי גז בכלי סגור מגדיל את מספר ההתנגשויות.", correct:true, pos:{c:2,r:3}},
+  {n:2, t:"תוספת חלקיקי גז לכלי סגור מקטינה את הלחץ.", correct:false, pos:{c:9,r:5}},
+  {n:28, t:"שלגון מיץ קפוא הפך ממוצק לנוזל - כוחות המשיכה התחזקו.", correct:false, pos:{c:10,r:5}},
+  {n:29, t:"פיזור צבע במים חמים איטי יותר ממים קרים.", correct:false, pos:{c:11,r:5}},
   {n:7, t:"עקרונות תורת החלקיקים נוסחו לפני 2500 שנים.", correct:true, pos:{c:3,r:3}},
   {n:"5ב", t:"כשחומר משנה מצב צבירה, סוג החלקיקים משתנה.", correct:false, pos:{c:12,r:5}},
-  {n:9, t:"חלקיקי בושם יכולים לפעפע בין החלקיקים שבאוויר.", correct:true, pos:{c:4,r:3}},
-  {n:21, t:"החלקיקים של חומר מסוים זהים בשלושת המצבים.", correct:true, pos:{c:5,r:3}},
+  {n:9, t:"חלקיקי בושם יכולים לפעפע בין חלקיקי האוויר.", correct:true, pos:{c:4,r:3}},
+  {n:21, t:"החלקיקים זהים בשלושת מצבי הצבירה.", correct:true, pos:{c:5,r:3}},
   {n:6, t:"פעפוע בין גזים מהיר מפעפוע בין נוזלים.", correct:true, pos:{c:6,r:3}},
   {n:22, t:"קמח חיטה הוא מוצק, בכל גרגר יש המוני חלקיקים.", correct:true, pos:{c:2,r:4}},
-  {n:19, t:"גביש הוא מבנה של מוצקים בעלי סדר מרחבי.", correct:true, pos:{c:4,r:4}},
-  {n:20, t:"חימום גז בכלי קשיח גורם ללחץ לגדול.", correct:true, pos:{c:6,r:4}},
+  {n:19, t:"גביש הוא מבנה מוצקים בעל סדר מרחבי.", correct:true, pos:{c:4,r:4}},
+  {n:20, t:"חימום גז בכלי סגור גורם ללחץ לגדול.", correct:true, pos:{c:6,r:4}},
 ];
 
 const grid = document.getElementById('grid');
@@ -150,7 +106,11 @@ const canvas = document.getElementById('revealCanvas');
 statements.forEach((s, i) => {
   const card = document.createElement('div');
   card.className = 'card';
-  card.innerHTML = `<button class="hex-btn" data-idx="${i}"><svg viewBox="0 0 54 54"><path class="hex-fill" d="M27 2 L49 14.5 L49 39.5 L27 52 L5 39.5 L5 14.5 Z"/></svg></button><span>${s.t}</span>`;
+  card.innerHTML = `<button class="hex-btn"><svg viewBox="0 0 54 54"><path class="hex-fill" d="M27 2 L49 14.5 L49 39.5 L27 52 L5 39.5 L5 14.5 Z"/></svg><span style="position:absolute;top:15px;left:21px;font-weight:800;font-size:16px;">${s.n}</span></button><span>${s.t}</span>`;
+  card.onclick = () => {
+    card.classList.toggle('active');
+    document.querySelector(`.rc-cell[data-idx="${i}"]`).classList.toggle('colored', card.classList.contains('active'));
+  };
   grid.appendChild(card);
   const rc = document.createElement('div');
   rc.className = 'rc-cell';
@@ -160,27 +120,20 @@ statements.forEach((s, i) => {
   canvas.appendChild(rc);
 });
 
-grid.addEventListener('click', e => {
-  const btn = e.target.closest('.hex-btn');
-  if(!btn) return;
-  btn.classList.toggle('colored');
-  document.querySelector(`.rc-cell[data-idx="${btn.dataset.idx}"]`).classList.toggle('colored', btn.classList.contains('colored'));
-});
-
-document.getElementById('checkBtn').addEventListener('click', () => {
+document.getElementById('checkBtn').onclick = () => {
   let right = 0;
   statements.forEach((s, i) => {
-    const btn = document.querySelectorAll('.hex-btn')[i];
+    const card = document.querySelectorAll('.card')[i];
     const rc = document.querySelectorAll('.rc-cell')[i];
-    const colored = btn.classList.contains('colored');
-    if (colored && s.correct) { btn.classList.add('result-right'); rc.classList.add('result-right'); right++; }
-    else if (colored && !s.correct) { btn.classList.add('result-wrong'); rc.classList.add('result-wrong'); }
+    if (card.classList.contains('active')) {
+      if (s.correct) { card.classList.add('right'); rc.classList.add('result-right'); right++; }
+      else { card.classList.add('wrong'); rc.classList.add('result-wrong'); }
+    }
   });
-  document.getElementById('scoreText').textContent = `זיהיתם ${right} משפטים נכונים!`;
-  document.getElementById('scoreBox').style.display = 'block';
-});
+  document.getElementById('scoreBox').textContent = `זיהיתם ${right} משפטים נכונים!`;
+};
 
-document.getElementById('resetBtn').addEventListener('click', () => location.reload());
+document.getElementById('resetBtn').onclick = () => location.reload();
 </script>
 </body>
 </html>
