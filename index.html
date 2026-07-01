@@ -5,11 +5,11 @@
 <meta charset="UTF-8">
 <style>
   :root {
-    --bg-pink: #fdf2f8; /* רקע ורוד בהיר מאוד */
+    --bg-pink: #fce7f3; /* ורוד רקע */
     --panel: #ffffff;
-    --border-pink: #fbcfe8; /* מסגרת ורודה */
+    --border-pink: #f472b6; /* גבול ורוד */
     --text: #4c0519;
-    --accent: #db2777; /* ורוד חזק לכפתורים */
+    --accent: #db2777;
     --yellow: #fde047;
     --wrong: #fda4af;
     --right: #4ade80;
@@ -17,46 +17,48 @@
   body { background: var(--bg-pink); color: var(--text); font-family: 'Assistant', sans-serif; padding: 20px; margin: 0; }
   .wrap { max-width: 800px; margin: 0 auto; }
   
-  /* אזור הציור */
-  .reveal-panel { background: var(--panel); border: 2px solid var(--border-pink); border-radius: 16px; padding: 20px; margin-bottom: 30px; }
+  .reveal-panel { background: var(--panel); border: 3px solid var(--border-pink); border-radius: 16px; padding: 20px; margin-bottom: 30px; }
   .reveal-canvas { display: grid; grid-template-columns: repeat(14, 1fr); gap: 2px; max-width: 500px; margin: 0 auto; }
   .rc-cell { aspect-ratio: 1/1; background: #fee2e2; border-radius: 2px; }
   .rc-cell.colored { background: var(--yellow); }
   .rc-cell.result-right { background: var(--right); }
   .rc-cell.result-wrong { background: var(--wrong); }
 
-  /* כרטיסי המשפטים */
-  .grid { display: grid; gap: 10px; }
+  .grid { display: grid; gap: 12px; }
   .card { 
     background: var(--panel); 
-    border: 2px solid var(--border-pink); 
+    border: 3px solid var(--border-pink); 
     border-radius: 12px; 
-    padding: 15px; 
+    padding: 20px; 
     display: flex; 
     align-items: center; 
     gap: 20px; 
-    cursor: pointer; 
+    cursor: pointer;
+    font-size: 19px; /* טקסט גדול יותר */
+    font-weight: 600;
   }
   
-  /* הריבוע שהפך לכפתור */
+  /* הריבוע כפתור בצד ימין */
   .square-btn { 
-    width: 40px; 
-    height: 40px; 
+    width: 50px; 
+    height: 50px; 
     border: 3px solid var(--border-pink); 
     border-radius: 8px; 
     background: white; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-weight: bold; 
-    font-size: 18px; 
+    font-weight: 800; 
+    font-size: 20px;
     flex-shrink: 0;
   }
   .card.active .square-btn { background: var(--yellow); border-color: var(--yellow); }
   .card.right .square-btn { background: var(--right); border-color: var(--right); }
   .card.wrong .square-btn { background: var(--wrong); border-color: var(--wrong); }
 
-  button.action { background: var(--accent); color: white; padding: 12px 30px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; }
+  button.action { background: var(--accent); color: white; padding: 15px 40px; border-radius: 30px; border: none; cursor: pointer; font-size: 18px; font-weight: bold; }
+  
+  footer { margin-top: 50px; text-align: center; font-size: 16px; color: var(--text); font-weight: bold; }
 </style>
 </head>
 <body>
@@ -64,7 +66,6 @@
 <div class="wrap">
   <header style="text-align:center;">
     <h1>מעבדת החלקיקים</h1>
-    <p>לחצו על הריבועים מימין כדי לסמן משפטים נכונים</p>
   </header>
 
   <div class="reveal-panel">
@@ -76,7 +77,9 @@
   <div style="text-align:center; margin-top:30px;">
     <button class="action" id="checkBtn">בדקו אותי</button>
   </div>
-  <div id="scoreBox" style="text-align:center; margin-top:20px; font-weight:bold;"></div>
+  <div id="scoreBox" style="text-align:center; margin-top:20px; font-weight:bold; font-size:18px;"></div>
+
+  <footer>עריכה: מילכה ברקו גרש</footer>
 </div>
 
 <script>
@@ -89,7 +92,7 @@ const statements = [
   {n:30, t:"החומר שעווה הוא בין החומרים המעטים שלא בנויים מחלקיקים.", correct:false, pos:{c:2,r:5}},
   {n:15, t:"גוף האדם בנוי מחלקיקים.", correct:true, pos:{c:8,r:1}},
   {n:25, t:"לברזל במצב מוצק ולברזל במצב נוזל יש חלקיקים בגודל שונה.", correct:false, pos:{c:3,r:5}},
-  {n:31, t:"חלקיקי המים שמתאדים מהרצפה נהרסים ונעלמים לגמרי מהעולם.", correct:false, pos:{c:4,r:5}},
+  {n:31, t:"חלקיקי המים שמתאדים מהרצפה נהרסים ונעלמים.", correct:false, pos:{c:4,r:5}},
   {n:4, t:"כשחומר הופך ממוצק לנוזל, החלקיקים עצמם הופכים לרכים יותר.", correct:false, pos:{c:5,r:5}},
   {n:12, t:"תנועת חלקיקי הגז היא חופשית ולכל הכיוונים.", correct:true, pos:{c:1,r:2}},
   {n:11, t:"בין החלקיקים במצב צבירה מוצק קיימים כוחות משיכה חזקים מאוד.", correct:true, pos:{c:2,r:2}},
@@ -122,7 +125,7 @@ const canvas = document.getElementById('revealCanvas');
 statements.forEach((s, i) => {
   const card = document.createElement('div');
   card.className = 'card';
-  card.innerHTML = `<div class="square-btn">${s.n}</div><div style="flex-grow:1;">${s.t}</div>`;
+  card.innerHTML = `<div class="square-btn">${s.n}</div><div>${s.t}</div>`;
   card.onclick = () => {
     card.classList.toggle('active');
     document.querySelector(`.rc-cell[data-idx="${i}"]`).classList.toggle('colored', card.classList.contains('active'));
