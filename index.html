@@ -1,53 +1,70 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>מעבדת החלקיקים</title>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f8fafc;
+    --bg-pink: #fdf2f8; /* רקע ורוד בהיר מאוד */
     --panel: #ffffff;
-    --border: #e2e8f0;
-    --text: #1e293b;
-    --accent: #0d9488;
+    --border-pink: #fbcfe8; /* מסגרת ורודה */
+    --text: #4c0519;
+    --accent: #db2777; /* ורוד חזק לכפתורים */
     --yellow: #fde047;
-    --wrong: #f43f5e;
-    --right: #22c55e;
+    --wrong: #fda4af;
+    --right: #4ade80;
   }
-  body { background: var(--bg); color: var(--text); font-family: 'Assistant', sans-serif; padding: 20px; margin: 0; }
-  .wrap { max-width: 900px; margin: 0 auto; }
-  header { text-align: center; margin-bottom: 30px; }
+  body { background: var(--bg-pink); color: var(--text); font-family: 'Assistant', sans-serif; padding: 20px; margin: 0; }
+  .wrap { max-width: 800px; margin: 0 auto; }
   
-  .reveal-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-  .reveal-canvas { display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(6, 1fr); gap: 2px; max-width: 500px; margin: 0 auto; }
-  .rc-cell { aspect-ratio: 1/1; background: #f1f5f9; border-radius: 2px; }
+  /* אזור הציור */
+  .reveal-panel { background: var(--panel); border: 2px solid var(--border-pink); border-radius: 16px; padding: 20px; margin-bottom: 30px; }
+  .reveal-canvas { display: grid; grid-template-columns: repeat(14, 1fr); gap: 2px; max-width: 500px; margin: 0 auto; }
+  .rc-cell { aspect-ratio: 1/1; background: #fee2e2; border-radius: 2px; }
   .rc-cell.colored { background: var(--yellow); }
   .rc-cell.result-right { background: var(--right); }
   .rc-cell.result-wrong { background: var(--wrong); }
 
-  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-  .card { background: var(--panel); border: 2px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.2s; }
-  .card:hover { border-color: var(--accent); }
+  /* כרטיסי המשפטים */
+  .grid { display: grid; gap: 10px; }
+  .card { 
+    background: var(--panel); 
+    border: 2px solid var(--border-pink); 
+    border-radius: 12px; 
+    padding: 15px; 
+    display: flex; 
+    align-items: center; 
+    gap: 20px; 
+    cursor: pointer; 
+  }
   
-  .hex-btn { width: 50px; height: 50px; flex-shrink: 0; border: none; background: none; position: relative; }
-  .hex-fill { fill: #e2e8f0; stroke: #cbd5e1; stroke-width: 2; }
-  .card.active .hex-fill { fill: var(--yellow); stroke: var(--yellow); }
-  .card.right .hex-fill { fill: var(--right); stroke: var(--right); }
-  .card.wrong .hex-fill { fill: var(--wrong); stroke: var(--wrong); }
-  
-  .controls { text-align: center; margin-top: 30px; }
-  button { padding: 12px 30px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin: 5px; background: var(--accent); color: white; }
-  #resetBtn { background: #e2e8f0; color: var(--text); }
+  /* הריבוע שהפך לכפתור */
+  .square-btn { 
+    width: 40px; 
+    height: 40px; 
+    border: 3px solid var(--border-pink); 
+    border-radius: 8px; 
+    background: white; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: bold; 
+    font-size: 18px; 
+    flex-shrink: 0;
+  }
+  .card.active .square-btn { background: var(--yellow); border-color: var(--yellow); }
+  .card.right .square-btn { background: var(--right); border-color: var(--right); }
+  .card.wrong .square-btn { background: var(--wrong); border-color: var(--wrong); }
+
+  button.action { background: var(--accent); color: white; padding: 12px 30px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; }
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <header>
+  <header style="text-align:center;">
     <h1>מעבדת החלקיקים</h1>
-    <p>לחצו על המשפטים הנכונים כדי לחשוף את הציור</p>
+    <p>לחצו על הריבועים מימין כדי לסמן משפטים נכונים</p>
   </header>
 
   <div class="reveal-panel">
@@ -56,9 +73,8 @@
 
   <div class="grid" id="grid"></div>
 
-  <div class="controls">
-    <button id="checkBtn">✓ בדקו אותי</button>
-    <button id="resetBtn">↺ איפוס</button>
+  <div style="text-align:center; margin-top:30px;">
+    <button class="action" id="checkBtn">בדקו אותי</button>
   </div>
   <div id="scoreBox" style="text-align:center; margin-top:20px; font-weight:bold;"></div>
 </div>
@@ -106,7 +122,7 @@ const canvas = document.getElementById('revealCanvas');
 statements.forEach((s, i) => {
   const card = document.createElement('div');
   card.className = 'card';
-  card.innerHTML = `<button class="hex-btn"><svg viewBox="0 0 54 54"><path class="hex-fill" d="M27 2 L49 14.5 L49 39.5 L27 52 L5 39.5 L5 14.5 Z"/></svg><span style="position:absolute;top:15px;left:21px;font-weight:800;font-size:16px;">${s.n}</span></button><span>${s.t}</span>`;
+  card.innerHTML = `<div class="square-btn">${s.n}</div><div style="flex-grow:1;">${s.t}</div>`;
   card.onclick = () => {
     card.classList.toggle('active');
     document.querySelector(`.rc-cell[data-idx="${i}"]`).classList.toggle('colored', card.classList.contains('active'));
@@ -130,10 +146,8 @@ document.getElementById('checkBtn').onclick = () => {
       else { card.classList.add('wrong'); rc.classList.add('result-wrong'); }
     }
   });
-  document.getElementById('scoreBox').textContent = `זיהיתם ${right} משפטים נכונים!`;
+  document.getElementById('scoreBox').textContent = `כל הכבוד! זיהית ${right} משפטים נכונים.`;
 };
-
-document.getElementById('resetBtn').onclick = () => location.reload();
 </script>
 </body>
 </html>
