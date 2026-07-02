@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root { --purple: #7e22ce; }
+  body { font-family: 'Assistant', sans-serif; background: #f5f3ff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+  
+  /* עיצוב הבקבוק */
+  .bottle-shape {
+    width: 300px; height: 350px; border: 8px solid var(--purple);
+    border-radius: 40% 40% 50% 50%; position: relative;
+    background: white; margin-top: 50px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; padding: 20px;
+  }
+
+  .slot { margin: 8px 0; font-weight: bold; font-size: 17px; }
+  select { border: 2px solid var(--purple); border-radius: 5px; padding: 2px; }
+  
+  /* חצים ואנימציה */
+  .arrow { position: absolute; font-size: 20px; color: var(--purple); }
+  
+  button { margin-top: 30px; padding: 15px 40px; background: var(--purple); color: white; border: none; border-radius: 50px; font-size: 20px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>תכונות הגז: על פי תורת החלקיקים</h1>
+<p>השלימו את המשפטים בתוך הבקבוק:</p>
+
+<div class="bottle-shape">
+  <div class="slot">1. פעפוע בין חלקיקי גז... <select id="s1"><option>---</option><option>מהיר</option><option>לדחוס</option></select></div>
+  <div class="slot">2. גז ניתן... <select id="s2"><option>---</option><option>לדחוס</option><option>גדול</option></select></div>
+  <div class="slot">3. תנועתם של חלקיקי הגז... <select id="s3"><option>---</option><option>אקראית</option><option>מהיר</option></select></div>
+  <div class="slot">4. המרחק בין חלקיקי הגז... <select id="s4"><option>---</option><option>גדול</option><option>לדחוס</option></select></div>
+  <div class="slot">5. חימום גז בכלי סגור גורם ל... <select id="s5"><option>---</option><option>לחץ</option><option>מהיר</option></select></div>
+  <div class="slot">6. הגז נוטה... <select id="s6"><option>---</option><option>להתפשט</option><option>לדחוס</option></select></div>
+</div>
+
+<button onclick="check()">בדקו אותי</button>
+<h2 id="result"></h2>
+
+<script>
+  function check() {
+    const answers = {s1:"מהיר", s2:"לדחוס", s3:"אקראית", s4:"גדול", s5:"לחץ", s6:"להתפשט"};
+    let correctCount = 0;
+    for(let id in answers) {
+      if(document.getElementById(id).value === answers[id]) correctCount++;
+    }
+    document.getElementById('result').innerText = `זיהית ${correctCount} מתוך 6 תשובות נכונות!`;
+  }
+</script>
+</body>
+</html>
